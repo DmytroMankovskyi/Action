@@ -1,0 +1,45 @@
+name: CI Workflow
+
+# Trigger the workflow on push or manual trigger
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Manual trigger option
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Selects the OS to run the workflow on
+
+    steps:
+      # Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up JDK (if it's a Kotlin project, otherwise adapt as necessary)
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      # Install dependencies (adapt if different for your project)
+      - name: Install dependencies
+        run: ./gradlew dependencies  # For Gradle; use npm install or similar if it's not a Gradle project
+
+      # Build the project
+      - name: Build project
+        run: ./gradlew build  # For Gradle
+
+      # Run tests
+      - name: Run tests
+        run: ./gradlew test  # For Gradle
+
+      # Commit and push changes if there are updates
+      - name: Commit and push updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Automated update by CI workflow"
+          git push
+        continue-on-error: true  # Avoid failing the job if there are no changes

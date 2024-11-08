@@ -24,15 +24,15 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: ./gradlew dependencies
+        run: ./project-folder/gradlew dependencies
 
       # Build the project
       - name: Build project
-        run: ./gradlew build
+        run: ./project-folder/gradlew build
 
       # Run tests
       - name: Run tests
-        run: ./gradlew test
+        run: ./project-folder/gradlew test
 
       # Commit and push changes if there are updates
       - name: Commit and push updates
